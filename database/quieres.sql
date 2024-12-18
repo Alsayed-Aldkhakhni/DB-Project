@@ -19,7 +19,6 @@
 --constraint chk_bonus check(bonus >= 0),
 --constraint chk_deductions check(deductions >= 0));
 
-
 /* 2nd table created. */
 --create table dependants(
 --emp_id number(10),
@@ -38,8 +37,8 @@
 --dpt_number number(10),
 --dpt_name varchar2(30) not null unique,
 --dpt_location varchar2(30) not null unique,
---mgr_id number(10),
---mgr_sDate date,
+--mgr_id number(10) UNIQUE,
+--mgr_sDate date DEFAULT SYSDATE,
 --constraint dpt_num_pk primary key(dpt_number),
 --constraint mgr_id_fk foreign key(mgr_id)
 --references employees(emp_id));
@@ -76,6 +75,75 @@
 --constraint emp_tsk_fk foreign key(emp_id)
 --references employees(emp_id));
 
+/* insert data to employees table. */
+/*
+insert into employees values(1001, 'Alsayed', 'Ali', '25 Tanta, Eg', to_date('10-18-2003', 'mm-dd-yyyy'),
+                             NULL, 'Male', 5000.25, 150, 60, 25.9, NULL);
+
+insert into employees values(1002, 'Mostafa', 'Ahmed', '125 Cairo, Eg', to_date('1-8-2000', 'mm-dd-yyyy'),
+                             NULL, 'Male', 7000.25, 50, 20, 20.0, NULL);
+
+insert into employees values(1003, 'Abdallah', 'Tarik', '40 Tanta, Eg', to_date('10-8-2002', 'mm-dd-yyyy'),
+                             NULL, 'Male', 6000.25, 15, 10, 15.5, NULL);
+
+insert into employees values(1004, 'Mona', 'Adel', '16 Menof, Eg', to_date('5-5-1999', 'mm-dd-yyyy'),
+                             NULL, 'Female', 8000.25, 10, 50, 15.9, NULL);
+
+insert into employees values(1005, 'Soha', 'Khalid', '123 Giza, Eg', to_date('7-8-1995', 'mm-dd-yyyy'),
+                             NULL, 'female', 5500.25, 15, 40, 12.9, NULL);
+
+insert into employees values(1006, 'Sami', 'Amr', '666 Qina, Eg', to_date('9-9-2001', 'mm-dd-yyyy'),
+                             NULL, 'Male', 6000.25, 0, 10, 21.9, NULL);
+
+insert into employees values(1007, 'Soli', 'Ameen', '44 Aswan, Eg', to_date('11-11-2002', 'mm-dd-yyyy'),
+                             NULL, 'Male', 7000.25, 10, 0, 23.9, NULL);
+*/
+
+/* insert data into dependants */
+/*
+insert into dependants values(1001, 'Hoda', 'Saad', 'female', 'wife');
+insert into dependants values(1001, 'Khalid', 'Alsayed', 'male', 'son');
+insert into dependants values(1002, 'Mohammed', 'Mostafa', 'male', 'son');
+insert into dependants values(1002, 'Soha', 'Mostafa', 'female', 'daugther');
+insert into dependants values(1003, 'Tarik', 'Abdalla', 'male', 'son');
+insert into dependants values(1003, 'Sara', 'Adel', 'female', 'wife');
+insert into dependants values(1004, 'Fahd', 'Sameer', 'male', 'son');
+*/
+
+/* insert data into departments. */
+/*
+insert into departments values(101, 'CS', 'Floor01', 1001, to_date('05-10-2005', 'mm-dd-yyyy'));
+insert into departments values(102, 'IT', 'Floor02', 1004, to_date('05-10-2005', 'mm-dd-yyyy'));
+insert into departments values(103, 'IS', 'Floor03', 1005);
+insert into departments values(104, 'OR', 'Floor04', 1002);
+*/
+
+/* insert data into projects table. */
+/*
+insert into projects values(511, 'ABC', 'Cairo', 101);
+insert into projects values(512, 'XYZ', 'Alex', 102);
+insert into projects values(513, 'QWE', 'Giza', 102);
+insert into projects values(514, 'UEF', 'Menofia', 104);
+*/
+
+/* insert data into works_on table. */
+/*
+insert into works_on values(511, 1001, 150);
+insert into works_on values(514, 1001, 160);
+insert into works_on values(511, 1003, 60);
+insert into works_on values(513, 1004, 40);
+insert into works_on values(512, 1005, 200);
+*/
+
+
+/* inser data into tasts table. */
+/*
+insert into tasks values(301, 'Task01',	1001, FALSE);
+insert into tasks values(302, 'Task02',	1001, TRUE);
+insert into tasks values(303, 'Task03',	1003, FALSE);
+insert into tasks values(303, 'Task04',	1005, FALSE);
+*/
+
 /* display tables' structure. */
 --desc employees;
 --desc departments;
@@ -83,6 +151,4 @@
 --desc projects;
 --desc works_on;
 --desc tasks;
-
-
 
