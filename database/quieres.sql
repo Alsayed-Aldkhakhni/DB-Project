@@ -1,3 +1,11 @@
+/*
+ * ===========================================
+ * Subject: Define the tables' structure.
+ * Date   : December 18, 2024
+ * Author : Alsayed A. khaleel
+ * ===========================================
+ */
+
 /* 1st table created. */
 --create table employees(
 --emp_id number(10),
