@@ -99,6 +99,8 @@ insert into employees values(1007, 'Soli',     'Ameen', '44 Aswan, Eg',  to_date
 
 -- update the age of the employees automatically.
 update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, date_of_birth) / 12));
+update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, date_of_birth) / 12));
+
 
 /* insert data into dependants */
 insert into dependants values(1001, 'Hoda',    'Saad', 'female', 'wife');
