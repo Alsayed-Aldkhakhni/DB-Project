@@ -1,98 +1,95 @@
 /*
  * ===========================================
- * Subject: Define the tables' structure.
- * Date   : December 18, 2024
- * Author : Alsayed A. khaleel
+ * Subject : Define the tables' structure.
+ * Date    : December 18, 2024
+ * Author  : Alsayed A. khaleel
+ * Last mod: December 19, 2024
  * ===========================================
  */
 
+
 /* 1st table created. */
-create table employees(
-emp_id number(10),
-emp_fname varchar2(20) not null,
-emp_lname varchar2(20) not null,
-emp_addr varchar2(30),
-date_of_birth date,
-emp_age number(3),
-emp_sex char(6),
-base_salary number(7, 2),
-bonus number(4, 2),
-deductions number(4, 2),
-rate_per_hour number(5, 2),
-dpt_number number(10),
-constraint emp_pk primary key(emp_id),
-constraint chk_age check(emp_age >= 20),
-constraint chk_sex check(emp_sex = 'Male' OR emp_sex = 'male' OR emp_sex = 'Female' OR emp_sex = 'female'),
-constraint chk_salary check(base_salary >= 0),
-constraint chk_bonus check(bonus >= 0),
-constraint chk_deductions check(deductions >= 0));
+CREATE TABLE employees(
+emp_id          NUMBER(10),
+emp_first_name  VARCHAR2(20) NOT NULL,
+emp_last_name   VARCHAR2(20) NOT NULL,
+emp_address     VARCHAR2(30),
+date_of_birth   DATE,
+emp_age         NUMBER(3),
+emp_sex         CHAR(6),
+base_salary     NUMBER(7, 2),
+bonus           NUMBER(4, 2),
+deductions      NUMBER(4, 2),
+rate_per_hour   NUMBER(5, 2),
+dpt_number      NUMBER(10),
+CONSTRAINT emp_id_pk      PRIMARY KEY(emp_id),
+CONSTRAINT chk_age        check(emp_age >= 20),
+CONSTRAINT chk_sex        check(emp_sex IN('Male', 'male', 'Female', 'female')),
+CONSTRAINT chk_salary     check(base_salary >= 0),
+CONSTRAINT chk_bonus      check(bonus >= 0),
+CONSTRAINT chk_deductions check(deductions >= 0));
 
 
 /* 2nd table created. */
-create table dependants(
-emp_id number(10),
-dpnd_fname varchar2(15),
-dpnd_lname varchar2(15),
-dpnd_sex char(6),
-dpnd_relationship varchar2(20),
-constraint emp_id_fk foreign key(emp_id) references employees(emp_id),
-constraint dpnd_chk_sex check(dpnd_sex = 'Male' OR dpnd_sex = 'male' OR dpnd_sex = 'Female' OR dpnd_sex = 'female'));
-
-alter table dependants modify (dpnd_fname not null, dpnd_lname not null, dpnd_relationship not null); 
-alter table dependants modify emp_id not null;
+CREATE TABLE dependants(
+emp_id            NUMBER(10)   NOT NULL,
+dpnd_first_name   VARCHAR2(15) NOT NULL,
+dpnd_last_name    VARCHAR2(15) NOT NULL,
+dpnd_sex          CHAR(6),
+dpnd_relationship VARCHAR2(20) NOT NULL,
+CONSTRAINT emp_id_fk      FOREIGN KEY(emp_id) references employees(emp_id),
+CONSTRAINT dpnd_chk_sex   check(emp_sex IN('Male', 'male', 'Female', 'female')));
 
 
 /* 3rd table created. */
-create table departments(
-dpt_number number(10),
-dpt_name varchar2(30) not null unique,
-dpt_location varchar2(30) not null unique,
-mgr_id number(10) UNIQUE,
-mgr_sDate date DEFAULT SYSDATE,
-constraint dpt_num_pk primary key(dpt_number),
-constraint mgr_id_fk foreign key(mgr_id)
-references employees(emp_id));
+CREATE TABLE departments(
+dpt_number    NUMBER(10),
+dpt_name      VARCHAR2(30) NOT NULL UNIQUE,
+dpt_location  VARCHAR2(30) NOT NULL UNIQUE,
+mgr_id        NUMBER(10)   UNIQUE,
+mgr_sDate     DATE         DEFAULT SYSDATE,
+CONSTRAINT dpt_num_pk      PRIMARY KEY(dpt_NUMBER),
+CONSTRAINT mgr_id_fk       FOREIGN KEY(mgr_id) references employees(emp_id));
+
+/* connect the employees table with departments one after creation. */
+ALTER TABLE employees ADD CONSTRAINT emp_dpt_fk FOREIGN KEY(dpt_number) references departments(dpt_number);
 
 
 /* 4th table. */
-create table projects(
-prj_number number(10),
-prj_name varchar2(30),
-prj_location varchar2(30),
-managed_by_dpt number(10),
-constraint dpt_prj_fk foreign key(managed_by_dpt) references departments(dpt_number),
-constraint prj_num_pk primary key(prj_number));
-alter table projects modify (prj_name not null unique, prj_location not null unique);
+CREATE TABLE projects(
+prj_number     NUMBER(10),
+prj_name       VARCHAR2(30) NOT NULL UNIQUE,
+prj_location   VARCHAR2(30) NOT NULL UNIQUE,
+managed_by_dpt NUMBER(10),
+CONSTRAINT prj_num_pk PRIMARY KEY(prj_number),
+CONSTRAINT dpt_prj_fk FOREIGN KEY(managed_by_dpt) references departments(dpt_NUMBER));
 
 
 /* 5th table. */
-create table works_on(
-emp_id number(10),
-prj_number number(10),
-worked_hours number(4, 1),
-constraint works_on_pk primary key(emp_id, prj_number),
-constraint emp_works_on_fk foreign key(emp_id) references employees(emp_id),
-constraint prj_number_fk foreign key(prj_number) references projects(prj_number));
-
-alter table works_on add constraint chk_hours check(worked_hours >= 0);
-alter table works_on modify worked_hours not null;
+CREATE TABLE works_on(
+emp_id       NUMBER(10),
+prj_number   NUMBER(10),
+worked_hours NUMBER(4, 1)    NOT NULL,
+CONSTRAINT   works_on_pk     PRIMARY KEY(emp_id, prj_number),
+CONSTRAINT   emp_works_on_fk FOREIGN KEY(emp_id)     references employees(emp_id),
+CONSTRAINT   prj_number_fk   FOREIGN KEY(prj_NUMBER) references projects(prj_number),
+CONSTRAINT   chk_hours       check(worked_hours >= 0));
 
 
 /* 6th table. */
-create table tasks(
-task_id number(5),
-task_name varchar2(30) NOT NULL UNIQUE,
-emp_id number(10),
-status varchar2(20),
-constraint tsk_pk primary key(task_id),
-constraint chk_status check(status in('Done', 'In progress')),
-constraint emp_tsk_fk foreign key(emp_id)
-references employees(emp_id));
+CREATE TABLE tasks(
+task_id     NUMBER(5),
+task_name   VARCHAR2(30) NOT NULL UNIQUE,
+emp_id      NUMBER(10),
+task_status VARCHAR2(20),
+CONSTRAINT tsk_pk        PRIMARY KEY(task_id),
+CONSTRAINT chk_status    check(task_status in('Done', 'In progress')),
+CONSTRAINT emp_tsk_fk    FOREIGN KEY(emp_id) references employees(emp_id));
 
 
 /* insert data to employees table. */
 insert into employees values(1001, 'Alsayed', 'Ali', '25 Tanta, Eg', to_date('10-18-2003', 'mm-dd-yyyy'),
-                             NULL, 'Male', 6000.00, 90, 60, 25.9, NULL);
+                             NULL, 'Male', 6000.12, 90, 60, 25.9, NULL);
 
 insert into employees values(1002, 'Mostafa', 'Ahmed', '125 Cairo, Eg', to_date('1-8-2000', 'mm-dd-yyyy'),
                              NULL, 'Male', 7000.25, 50, 20, 20.0, NULL);
@@ -114,7 +111,7 @@ insert into employees values(1007, 'Soli', 'Ameen', '44 Aswan, Eg', to_date('11-
 
 
 -- update the age of the employees automatically.
-update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, emp_dob) / 12));
+update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, date_of_birth) / 12));
 
 /* insert data into dependants */
 insert into dependants values(1001, 'Hoda', 'Saad', 'female', 'wife');
@@ -134,13 +131,13 @@ insert into departments values(104, 'OR', 'Floor04', 1002, SYSDATE);
 
 
 /* update the department of each employee. */
-update employees set dpt_number = 101 where emp_id = 1001;
-update employees set dpt_number = 101 where emp_id = 1002;
-update employees set dpt_number = 103 where emp_id = 1003;
-update employees set dpt_number = 102 where emp_id = 1004;
-update employees set dpt_number = 104 where emp_id = 1005;
-update employees set dpt_number = 104 where emp_id = 1006;
-update employees set dpt_number = 104 where emp_id = 1007;
+update employees set dpt_NUMBER = 101 where emp_id = 1001;
+update employees set dpt_NUMBER = 101 where emp_id = 1002;
+update employees set dpt_NUMBER = 103 where emp_id = 1003;
+update employees set dpt_NUMBER = 102 where emp_id = 1004;
+update employees set dpt_NUMBER = 104 where emp_id = 1005;
+update employees set dpt_NUMBER = 104 where emp_id = 1006;
+update employees set dpt_NUMBER = 104 where emp_id = 1007;
 
 
 /* insert data into projects table. */
@@ -165,21 +162,3 @@ insert into tasks values(301, 'Task01',	1001, 'In progress');
 insert into tasks values(302, 'Task02',	1001, 'Done');
 insert into tasks values(303, 'Task03',	1003, 'In progress');
 insert into tasks values(304, 'Task04',	1005, 'In progress');
-
-
-/* display tables' structure. */
--- desc employees;
--- desc departments;
--- desc dependants;
--- desc projects;
--- desc works_on
--- desc tasks;
-
-/* retreive all data from tables. */
--- SELECT * FROM EMPLOYEES;
--- SELECT * FROM DEPARTMENTS;
--- SELECT * FROM DEPENDANTS;
--- SELECT * FROM PROJECTS;
--- SELECT * FROM TASKS;
--- SELECT * FROM WORKS_ON;
-
