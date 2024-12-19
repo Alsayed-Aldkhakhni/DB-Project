@@ -12,7 +12,7 @@ emp_id number(10),
 emp_fname varchar2(20) not null,
 emp_lname varchar2(20) not null,
 emp_addr varchar2(30),
-emp_dob date,
+date_of_birth date,
 emp_age number(3),
 emp_sex char(6),
 base_salary number(7, 2),
@@ -21,7 +21,7 @@ deductions number(4, 2),
 rate_per_hour number(5, 2),
 dpt_number number(10),
 constraint emp_pk primary key(emp_id),
-constraint chk_age check(emp_age >= 22),
+constraint chk_age check(emp_age >= 20),
 constraint chk_sex check(emp_sex = 'Male' OR emp_sex = 'male' OR emp_sex = 'Female' OR emp_sex = 'female'),
 constraint chk_salary check(base_salary >= 0),
 constraint chk_bonus check(bonus >= 0),
@@ -92,7 +92,7 @@ references employees(emp_id));
 
 /* insert data to employees table. */
 insert into employees values(1001, 'Alsayed', 'Ali', '25 Tanta, Eg', to_date('10-18-2003', 'mm-dd-yyyy'),
-                             NULL, 'Male', 6000, 90, 60, 25.9, NULL);
+                             NULL, 'Male', 6000.00, 90, 60, 25.9, NULL);
 
 insert into employees values(1002, 'Mostafa', 'Ahmed', '125 Cairo, Eg', to_date('1-8-2000', 'mm-dd-yyyy'),
                              NULL, 'Male', 7000.25, 50, 20, 20.0, NULL);
@@ -112,6 +112,9 @@ insert into employees values(1006, 'Sami', 'Amr', '666 Qina, Eg', to_date('9-9-2
 insert into employees values(1007, 'Soli', 'Ameen', '44 Aswan, Eg', to_date('11-11-2002', 'mm-dd-yyyy'),
                              NULL, 'Male', 7000.25, 10, 0, 23.9, NULL);
 
+
+-- update the age of the employees automatically.
+update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, emp_dob) / 12));
 
 /* insert data into dependants */
 insert into dependants values(1001, 'Hoda', 'Saad', 'female', 'wife');
@@ -171,3 +174,12 @@ insert into tasks values(304, 'Task04',	1005, 'In progress');
 -- desc projects;
 -- desc works_on
 -- desc tasks;
+
+/* retreive all data from tables. */
+-- SELECT * FROM EMPLOYEES;
+-- SELECT * FROM DEPARTMENTS;
+-- SELECT * FROM DEPENDANTS;
+-- SELECT * FROM PROJECTS;
+-- SELECT * FROM TASKS;
+-- SELECT * FROM WORKS_ON;
+
