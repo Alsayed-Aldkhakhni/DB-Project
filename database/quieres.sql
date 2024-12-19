@@ -17,7 +17,7 @@ emp_address     VARCHAR2(30),
 date_of_birth   DATE,
 emp_age         NUMBER(3),
 emp_sex         CHAR(6),
-base_salary     NUMBER(7, 2),
+salary          NUMBER(7, 2),
 bonus           NUMBER(4, 2),
 deductions      NUMBER(4, 2),
 rate_per_hour   NUMBER(5, 2),
@@ -25,7 +25,7 @@ dpt_number      NUMBER(10),
 CONSTRAINT emp_id_pk      PRIMARY KEY(emp_id),
 CONSTRAINT chk_age        check(emp_age >= 20),
 CONSTRAINT chk_sex        check(emp_sex IN('Male', 'male', 'Female', 'female')),
-CONSTRAINT chk_salary     check(base_salary >= 0),
+CONSTRAINT chk_salary     check(salary >= 0),
 CONSTRAINT chk_bonus      check(bonus >= 0),
 CONSTRAINT chk_deductions check(deductions >= 0));
 
@@ -88,39 +88,26 @@ CONSTRAINT emp_tsk_fk    FOREIGN KEY(emp_id) references employees(emp_id));
 
 
 /* insert data to employees table. */
-insert into employees values(1001, 'Alsayed', 'Ali', '25 Tanta, Eg', to_date('10-18-2003', 'mm-dd-yyyy'),
-                             NULL, 'Male', 6000.12, 90, 60, 25.9, NULL);
-
-insert into employees values(1002, 'Mostafa', 'Ahmed', '125 Cairo, Eg', to_date('1-8-2000', 'mm-dd-yyyy'),
-                             NULL, 'Male', 7000.25, 50, 20, 20.0, NULL);
-
-insert into employees values(1003, 'Abdallah', 'Tarik', '40 Tanta, Eg', to_date('10-8-2002', 'mm-dd-yyyy'),
-                             NULL, 'Male', 6000.25, 15, 10, 15.5, NULL);
-
-insert into employees values(1004, 'Mona', 'Adel', '16 Menof, Eg', to_date('5-5-1999', 'mm-dd-yyyy'),
-                             NULL, 'Female', 8000.25, 10, 50, 15.9, NULL);
-
-insert into employees values(1005, 'Soha', 'Khalid', '123 Giza, Eg', to_date('7-8-1995', 'mm-dd-yyyy'),
-                             NULL, 'female', 5500.25, 15, 40, 12.9, NULL);
-
-insert into employees values(1006, 'Sami', 'Amr', '666 Qina, Eg', to_date('9-9-2001', 'mm-dd-yyyy'),
-                             NULL, 'Male', 6000.25, 0, 10, 21.9, NULL);
-
-insert into employees values(1007, 'Soli', 'Ameen', '44 Aswan, Eg', to_date('11-11-2002', 'mm-dd-yyyy'),
-                             NULL, 'Male', 7000.25, 10, 0, 23.9, NULL);
+insert into employees values(1001, 'Alsayed',  'Ali',   '25 Tanta, Eg',  to_date('10-18-2003', 'mm-dd-yyyy'),  NULL, 'Male', 0, 90, 60, 25.9,   NULL);
+insert into employees values(1002, 'Mostafa',  'Ahmed', '125 Cairo, Eg', to_date('1-8-2000', 'mm-dd-yyyy'),    NULL, 'Male', 0, 50, 20, 20.0,   NULL);
+insert into employees values(1003, 'Abdallah', 'Tarik', '40 Tanta, Eg',  to_date('10-8-2002', 'mm-dd-yyyy'),   NULL, 'Male', 0, 15, 10, 15.5,   NULL);
+insert into employees values(1004, 'Mona',     'Adel',  '16 Menof, Eg',  to_date('5-5-1999', 'mm-dd-yyyy'),    NULL, 'Female', 0, 10, 50, 15.9, NULL);
+insert into employees values(1005, 'Soha',     'Khalid','123 Giza, Eg',  to_date('7-8-1995', 'mm-dd-yyyy'),    NULL, 'female', 0, 15, 40, 12.9, NULL);
+insert into employees values(1006, 'Sami',     'Amr',   '666 Qina, Eg',  to_date('9-9-2001', 'mm-dd-yyyy'),    NULL, 'Male', 0, 0, 10, 21.9,    NULL);
+insert into employees values(1007, 'Soli',     'Ameen', '44 Aswan, Eg',  to_date('11-11-2002', 'mm-dd-yyyy'),  NULL, 'Male', 0, 10, 0, 23.9,    NULL);
 
 
 -- update the age of the employees automatically.
 update EMPLOYEES set emp_age = (FLOOR(MONTHS_BETWEEN(SYSDATE, date_of_birth) / 12));
 
 /* insert data into dependants */
-insert into dependants values(1001, 'Hoda', 'Saad', 'female', 'wife');
-insert into dependants values(1001, 'Khalid', 'Alsayed', 'male', 'son');
-insert into dependants values(1002, 'Mohammed', 'Mostafa', 'male', 'son');
-insert into dependants values(1002, 'Soha', 'Mostafa', 'female', 'daugther');
-insert into dependants values(1003, 'Tarik', 'Abdalla', 'male', 'son');
-insert into dependants values(1003, 'Sara', 'Adel', 'female', 'wife');
-insert into dependants values(1004, 'Fahd', 'Sameer', 'male', 'son');
+insert into dependants values(1001, 'Hoda',    'Saad', 'female', 'wife');
+insert into dependants values(1001, 'Khalid',  'Alsayed', 'male', 'son');
+insert into dependants values(1002, 'Mohammed','Mostafa', 'male', 'son');
+insert into dependants values(1002, 'Soha',    'Mostafa', 'female', 'daugther');
+insert into dependants values(1003, 'Tarik',   'Abdalla', 'male', 'son');
+insert into dependants values(1003, 'Sara',    'Adel', 'female', 'wife');
+insert into dependants values(1004, 'Fahd',    'Sameer', 'male', 'son');
 
 
 /* insert data into departments. */
@@ -150,11 +137,27 @@ insert into projects values(514, 'UEF', 'Menofia', 104);
 /* insert data into works_on table. */
 insert into works_on values(1001, 511, 150);
 insert into works_on values(1001, 514, 160);
-insert into works_on values(1003, 511, 60);
-insert into works_on values(1004, 513, 40);
-insert into works_on values(1005, 512, 20);
+insert into works_on values(1002, 514, 200);
+insert into works_on values(1003, 511, 160);
+insert into works_on values(1004, 513, 140);
+insert into works_on values(1005, 512, 120);
 insert into works_on values(1006, 513, 140);
 insert into works_on values(1007, 512, 200);
+
+
+/* automatically calculate the total salary of employees. */
+UPDATE employees
+SET salary = (
+    SELECT SUM(worked_hours) * employees.rate_per_hour
+    FROM works_on
+    WHERE works_on.emp_id = employees.emp_id
+    GROUP BY works_on.emp_id ) + (bonus - deductions)
+
+    WHERE EXISTS (
+    SELECT 1
+    FROM works_on
+    WHERE works_on.emp_id = employees.emp_id
+);
 
 
 /* inser data into tasts table. */
@@ -162,3 +165,4 @@ insert into tasks values(301, 'Task01',	1001, 'In progress');
 insert into tasks values(302, 'Task02',	1001, 'Done');
 insert into tasks values(303, 'Task03',	1003, 'In progress');
 insert into tasks values(304, 'Task04',	1005, 'In progress');
+
